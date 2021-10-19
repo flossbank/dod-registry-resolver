@@ -1,0 +1,48 @@
+{
+  "name": "distribute-org-donations",
+  "version": "1.0.0",
+  "description": "distribute-org-donations",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard --fix",
+    "ci-tests": "nyc --reporter=cobertura ava",
+    "test": "standard && ava -v"
+  },
+  "dependencies": {
+    "@flossbank/registry-resolver": "^2.1.0",
+    "@octokit/app": "^4.2.1",
+    "aws-sdk": "^2.543.0",
+    "call-limit": "^1.1.1",
+    "got": "^11.8.1",
+    "minimatch": "^3.0.4",
+    "mongodb": "^3.4.1",
+    "pino": "^6.5.1",
+    "ulid": "^2.3.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm t"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flossbank/distribute-org-donations.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flossbank/distribute-org-donations/issues"
+  },
+  "homepage": "https://github.com/flossbank/distribute-org-donations#readme",
+  "devDependencies": {
+    "ava": "^3.12.1",
+    "husky": "^4.2.5",
+    "mongodb-memory-server": "^6.9.6",
+    "nock": "^13.0.4",
+    "nyc": "^15.0.0",
+    "pino-pretty": "^4.1.0",
+    "sinon": "^9.0.1",
+    "standard": "^14.3.1"
+  }
+}
