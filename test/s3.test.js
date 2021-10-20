@@ -40,11 +40,11 @@ test('getTopLevelPackages', async (t) => {
   ])
 
   t.deepEqual(t.context.s3.s3.getObject.firstCall.args, [{
-    Bucket: 'org_donation_state',
+    Bucket: 'org-donation-state',
     Key: 'asdf/javascript_npm_top_level_packages.json'
   }])
   t.deepEqual(t.context.s3.s3.getObject.secondCall.args, [{
-    Bucket: 'org_donation_state',
+    Bucket: 'org-donation-state',
     Key: 'asdf/ruby_rubygems_top_level_packages.json'
   }])
 })
