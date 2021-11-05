@@ -1,43 +1,39 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Distributes organization donations to the either their version control packages or to the global ecosystem
+Description: Resolves top level dependencies into package weights map and persists to S3
 Parameters:
   MongoUri:
     Type: AWS::SSM::Parameter::Value<String>
     Default: '/api/db/mongo_uri'
-  GitHubAppPEM:
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: '/api/github/app_pem'
-  GitHubAppID:
-    Type: AWS::SSM::Parameter::Value<String>
-    Default: '/api/github/app_id'
 Resources:
-  DistributeOrgDonationsDeadLetterQueue:
+  OrgRegistryResolverDeadLetterQueue:
     Type: AWS::SQS::Queue
-  DistributeOrgDonationsQueue:
+  OrgRegistryResolverQueue:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: distribute-org-donations-input
+      QueueName: org-registry-resolver-input
       RedrivePolicy:
-        deadLetterTargetArn: !GetAtt DistributeOrgDonationsDeadLetterQueue.Arn
+        deadLetterTargetArn: !GetAtt OrgRegistryResolverDeadLetterQueue.Arn
         maxReceiveCount: 3
       VisibilityTimeout: 960
-  DistributeOrgDonationsFunction:
+  OrgRegistryResolverFunction:
     Type: AWS::Serverless::Function
     Properties:
       Timeout: 900
+      MemorySize: 2048
       Handler: index.handler
       Runtime: nodejs12.x
       CodeUri: ./
       Events:
-        DistributeOrgDonationsEvent:
+        OrgRegistryResolverEvent:
           Type: SQS
           Properties:
-            Queue: !GetAtt DistributeOrgDonationsQueue.Arn
+            Queue: !GetAtt OrgRegistryResolverQueue.Arn
             BatchSize: 1
       Policies:
         - AmazonSQSFullAccess
         - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
         - Statement:
           - Effect: Allow
             Action:
@@ -47,5 +43,3 @@ Resources:
       Environment:
         Variables:
           MONGO_URI: !Ref MongoUri
-          GITHUB_APP_PEM: !Ref GitHubAppPEM
-          GITHUB_APP_ID: !Ref GitHubAppID
