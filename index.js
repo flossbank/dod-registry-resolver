@@ -23,7 +23,7 @@ exports.handler = async (event) => {
   const log = Pino()
   const dynamo = new Dynamo({ log, docs })
   const config = new Config({ log, kms, dynamo })
-  const s3 = new S3({ log, s3: awsS3 })
+  const s3 = new S3({ log, config, s3: awsS3 })
   const sqs = new SQS({ sqs: awsSqs, config })
 
   const db = new Db({ log, config })
