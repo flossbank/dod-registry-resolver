@@ -33,6 +33,11 @@ test('getOrgDistributeDonationInputQueueUrl', (t) => {
   t.is(t.context.config.getOrgDistributeDonationInputQueueUrl(), 'abc')
 })
 
+test('getBucketName', (t) => {
+  process.env.ORG_DONATION_STATE_BUCKET = 'abc'
+  t.is(t.context.config.getBucketName(), 'abc')
+})
+
 test('config vals stored in dynamo are retrieved and cached', async (t) => {
   const { config } = t.context
   config.dynamo.getConfigValue.resolves('abc')
